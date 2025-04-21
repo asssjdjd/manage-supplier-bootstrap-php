@@ -10,9 +10,55 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <!-- CSS của Flatpickr -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <link rel="stylesheet" href="./assets/css/main.css">
-    <link rel="stylesheet" href="./assets/css/navbar.css">
-    <title>Dashboard</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/navbar.css">
+    <title>Hợp Đồng</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        
+        @media (max-width : 576px) {
+            #chart {
+                display: none;
+            }
+        }
+        .table-container {
+            width: 100%;
+            /* Đảm bảo thẻ cha có chiều rộng linh hoạt */
+            overflow-x: auto;
+            /* Tạo thanh cuộn ngang khi nội dung vượt quá */
+        }
+
+        .table {
+            min-width: 100%;
+            /* Đảm bảo bảng luôn chiếm ít nhất chiều rộng thẻ cha */
+        }
+    </style>
 </head>
 
 <body>
@@ -34,7 +80,7 @@
                                     <a href="dashboard.html" class="d-flex align-items-center"
                                         onclick="setActive(this)">
                                         <span class="me-2"><i class="fa-solid fa-house"></i></span>
-                                        <span>Dashboard</span>
+                                        <span>Bảng điều khiển</span>
                                     </a>
                                 </li>
                                 <li class="list-group-item">
@@ -78,9 +124,9 @@
                                     </a>
                                 </li>
                                 <li class="list-group-item">
-                                    <a href="logout.html" class="d-flex align-items-center" onclick="setActive(this)">
+                                    <a href="login.html" class="d-flex align-items-center" onclick="setActive(this)">
                                         <span class="me-2"><i class="fa-solid fa-right-from-bracket"></i></span>
-                                        <span>Logout</span>
+                                        <span>Đăng xuất</span>
                                     </a>
                                 </li>
                             </div>
@@ -96,7 +142,7 @@
                         <ul class="nav justify-content-between">
                             <div id="header-left">
                                 <li class="nav-item">
-                                    <h3 class="mt-3 fs-3" href="#">CONTRACT</h3>
+                                    <h3 class="mt-3 fs-3 fw-bold" href="#">HỢP ĐỒNG</h3>
                                 </li>
                             </div>
 
@@ -115,6 +161,7 @@
                         </ul>
                     </div>
                 </div>
+
                 <!-- content -->
                 <div class="container">
                     <!-- filter -->
@@ -170,8 +217,8 @@
                                         <span class="input-group-text">
                                             <i class="bi bi-calendar"></i>
                                         </span>
-                                        <input type="text" class="form-control" id = "fromDate" placeholder="Từ ngày">
-                                        <input type="text" class="form-control" id = "toDate" placeholder="Đến ngày">
+                                        <input type="text" class="form-control" id="fromDate" placeholder="Từ ngày">
+                                        <input type="text" class="form-control" id="toDate" placeholder="Đến ngày">
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-sm-6">
@@ -187,7 +234,7 @@
                             </div>
                         </div>
 
-                        <!-- Modal for Adding New Contract (Placeholder) -->
+                        <!-- Modal: Add New Contract -->
                         <div class="modal fade" id="addContractModal" tabindex="-1"
                             aria-labelledby="addContractModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
@@ -198,38 +245,236 @@
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <!-- Form fields will go here -->
-                                        <p>Form thêm hợp đồng sẽ được thêm vào đây.</p>
+                                        <div class="mb-3">
+                                            <label for="addSupplierName" class="form-label">Tên nhà cung cấp</label>
+                                            <select class="form-select" id="addSupplierName" required>
+                                                <option value="" disabled selected>Chọn nhà cung cấp</option>
+                                                <option>Mark</option>
+                                                <option>Jacob</option>
+                                                <option>Larry</option>
+                                                <option>David</option>
+                                                <option>Sarah</option>
+                                                <option>John</option>
+                                                <option>Alice</option>
+                                                <option>Bob</option>
+                                                <option>Emily</option>
+                                                <option>Michael</option>
+                                                <option>Lisa</option>
+                                                <option>James</option>
+                                                <option>Robert</option>
+                                                <option>Nancy</option>
+                                                <option>George</option>
+                                                <option>William</option>
+                                                <option>Olivia</option>
+                                                <option>Sophia</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="addContractName" class="form-label">Tên hợp đồng</label>
+                                            <input type="text" class="form-control" id="addContractName"
+                                                placeholder="VD: HD020" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="addService" class="form-label">Loại dịch vụ</label>
+                                            <select class="form-select" id="addService" required>
+                                                <option value="" disabled selected>Chọn loại dịch vụ</option>
+                                                <option>Vệ sinh</option>
+                                                <option>Điện</option>
+                                                <option>Bảo trì</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="addStartDate" class="form-label">Ngày bắt đầu</label>
+                                            <input type="date" class="form-control" id="addStartDate" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="addEndDate" class="form-label">Ngày kết thúc</label>
+                                            <input type="date" class="form-control" id="addEndDate" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="addStatus" class="form-label">Trạng thái</label>
+                                            <select class="form-select" id="addStatus" required>
+                                                <option value="" disabled selected>Chọn trạng thái</option>
+                                                <option>Đang hoạt động</option>
+                                                <option>Sắp hết hạn</option>
+                                                <option>Hết hạn</option>
+                                                <option>Đã hủy</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="addFile" class="form-label">File đính kèm</label>
+                                            <input type="file" class="form-control" id="addFile"
+                                                accept=".pdf,.doc,.docx">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="addNote" class="form-label">Ghi chú</label>
+                                            <textarea class="form-control" id="addNote" rows="3"
+                                                placeholder="Nhập ghi chú nếu có"></textarea>
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
                                             data-bs-dismiss="modal">Hủy</button>
-                                        <button type="button" class="btn btn-primary">Lưu</button>
+                                        <button type="button" class="btn btn-primary"
+                                            onclick="addContract()">Lưu</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        
+                    </div>
+
+                    <!-- list contract -->
+                    <div id="list-contracts">
+                        <div class="container table-container">
+                            <h3 class="mt-4 mb-4">Danh Sách Hợp Đồng</h3>
+                            <table class="mb-3 overflow-auto">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Tên nhà cung cấp</th>
+                                        <th scope="col">Tên hợp đồng</th>
+                                        <th scope="col">Loại dịch vụ</th>
+                                        <th scope="col">Ngày bắt đầu</th>
+                                        <th scope="col">Ngày kết thúc</th>
+                                        <th scope="col">Trạng thái</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="contract-list">
+                                    <!-- Data will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Pagination -->
+                        <div id="paginate-contract">
+                            <nav aria-label="pagination-area-button">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Trước</a>
+                                    </li>
+                                    <li class="page-item active">
+                                        <a class="page-link" href="#">1</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">2</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">...</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">Sau</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+
+                        <!-- Modal: View Contract Details -->
+                        <div class="modal fade" id="viewContractModal" tabindex="-1"
+                            aria-labelledby="viewContractModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="viewContractModalLabel">Chi tiết hợp đồng</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body " id="viewContractModalBody">
+                                        <!-- Details will be populated dynamically -->
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Đóng</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal: Update Contract -->
+                        <div class="modal fade" id="updateContractModal" tabindex="-1"
+                            aria-labelledby="updateContractModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="updateContractModalLabel">Chỉnh sửa hợp đồng
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="updateSupplierName" class="form-label">Tên nhà cung
+                                                cấp</label>
+                                            <input type="text" class="form-control" id="updateSupplierName">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="updateContractName" class="form-label">Tên hợp đồng</label>
+                                            <input type="text" class="form-control" id="updateContractName">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="updateService" class="form-label">Loại dịch vụ</label>
+                                            <input type="text" class="form-control" id="updateService">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="updateStartDate" class="form-label">Ngày bắt đầu</label>
+                                            <input type="date" class="form-control" id="updateStartDate">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="updateEndDate" class="form-label">Ngày kết thúc</label>
+                                            <input type="date" class="form-control" id="updateEndDate">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Hủy</button>
+                                        <button type="button" class="btn btn-primary" id="saveUpdate">Lưu</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal: Delete Confirmation -->
+                        <div class="modal fade" id="deleteContractModal" tabindex="-1"
+                            aria-labelledby="deleteContractModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteContractModalLabel">Xác nhận xóa</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" id="deleteContractModalBody">
+                                        <!-- Confirmation message will be populated dynamically -->
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Hủy</button>
+                                        <button type="button" class="btn btn-danger" id="confirmDelete">Xóa</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
-        <!-- JS của Flatpickr -->
-        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="./assets/js/main.js"></script>
-        <script>
-            flatpickr("#fromDate", {
-                dateFormat: "d/m/Y", // Format ngày: dd/mm/yyyy
-                allowInput: true
-            });
+    </div>
+    <!-- JS của Flatpickr -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <script src="/assets/js/contract.js"></script>
+    <script>
+        flatpickr("#fromDate", {
+            dateFormat: "d/m/Y", // Format ngày: dd/mm/yyyy
+            allowInput: true
+        });
 
-            flatpickr("#toDate", {
-                dateFormat: "d/m/Y",
-                allowInput: true
-            });
-        </script>
+        flatpickr("#toDate", {
+            dateFormat: "d/m/Y",
+            allowInput: true
+        });
+    </script>
 </body>
 
 </html>
